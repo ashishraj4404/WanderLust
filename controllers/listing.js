@@ -1,20 +1,25 @@
 const Listing = require("../models/listing.js");
 
 module.exports.index = async (req,res) => {
-    const { q } = req.query;
+    const { q, priceMin, priceMax } = req.query;
     let allListings;
     if(q) {
          allListings = await Listing.find({
       $or: [
         { title: { $regex: q, $options: "i" } },
         { location: { $regex: q, $options: "i" } },
-        { country: { $regex: q, $options: "i" } }  // Case-insensitive search by place
+        { country: { $regex: q, $options: "i" } },  // Case-insensitive search by place
+        { category: { $in: [q.toLowerCase()] } }
       ]
     });
+    }
+    else if(priceMin && priceMax) {
+        allListings = await Listing.find({price : { $gt : Number(priceMin),  $lt : Number(priceMax) }});
     }
     else {
         allListings = await Listing.find({});
     }
+    
     res.render("listings/index.ejs", {allListings});
 }
 

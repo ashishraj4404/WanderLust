@@ -4,12 +4,18 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    position: sticky;
+    top : 80px;
+    background-color: white;
+    z-index: 1000;
   }
   .filter {
     text-align: center;
-    margin-right: 2rem;
+    margin-right: 1.55rem;
     margin-top: 1.5rem;
     opacity: .8;
+    text-decoration: none;
+    color: inherit;
   }
   .filter p {
     font-size: .8rem;
@@ -17,6 +23,9 @@
   .filter:hover {
     opacity: 1;
     cursor: pointer;
+  }
+  .category {
+    display : flex;
   }
   .tax-info {
     display: none;
@@ -28,56 +37,140 @@
     padding: 1rem;
     display: flex;
     align-items: center;
-    margin-left: 5rem;
+  }
+  .price-filter {
+    margin: 0 2rem;
+  }
+  .price-filter-btn {
+    all: unset;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border: 1px solid #ccc; 
+      border-radius: 999px; 
+      font-family: sans-serif;
+      font-size: 16px;
+      cursor: pointer;
+      transition: border-color 0.2s ease;
+  }
+  .price-filter-btn:hover {
+      border-color: #000; 
+    }
+    .arrow {
+  font-size: 12px;
+}
+.price-filter-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.price-dropdown-box {
+  display: none;
+  position: absolute;
+  top: 120%;    
+
+  width: 350px;
+  background-color: gainsboro;
+  z-index: 9999; 
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  border-radius: 8px;
+}
+  .dropbox {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+  .dropdown-section {
+    text-align: center;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  }
+  .price-input {
+    margin-left: 15px;
+    border-radius: 4rem;
+    height: 2rem;
   }
 </style>
   <body>
-    
     <div id="filters">
-      <div class="filter">
+      <div class="category">
+        <a  href="/listings?q=trending" class="filter">
         <div><i class="fa-solid fa-fire"></i></div>
         <p>Trending</p>
-      </div>
-      <div class="filter">
+      </a>
+      <a  href="/listings?q=rooms" class="filter">
         <div><i class="fa-solid fa-bed"></i></div>
         <p>Rooms</p>
-      </div>
-      <div class="filter">
+      </a>
+      <a  href="/listings?q=iconic cities" class="filter">
         <div><i class="fa-solid fa-mountain-city"></i></div>
         <p>Iconic Cities</p>
-      </div>
-      <div class="filter">
+      </a>
+      <a  href="/listings?q=mountains" class="filter">
         <div><i class="fa-solid fa-mountain"></i></div>
         <p>Mountains</p>
-      </div>
-      <div class="filter">
+      </a>
+      <a  href="/listings?q=castles" class="filter">
         <div><i class="fa-brands fa-fort-awesome"></i></div>
         <p>Castles</p>
-      </div>
-      <div class="filter">
+      </a>
+      <a  href="/listings?q=amazing pools" class="filter">
         <div><i class="fa-solid fa-person-swimming"></i></div>
         <p>Amazing Pools</p>
-      </div>
-      <div class="filter">
+      </a>
+      <a  href="/listings?q=camping" class="filter">
         <div><i class="fa-solid fa-campground"></i></div>
         <p>Camping</p>
-      </div>
-      <div class="filter">
+      </a>
+      <a  href="/listings?q=farms" class="filter">
         <div><i class="fa-solid fa-tractor"></i></div>
         <p>Farms</p>
-      </div>
-      <div class="filter">
+      </a>
+      <a  href="/listings?q=arctic" class="filter">
         <div><i class="fa-regular fa-snowflake"></i></div>
         <p>Arctic</p>
-      </div>
-      <div class="filter">
+      </a>
+      <a  href="/listings?q=domes" class="filter">
         <div><i class="fa-solid fa-igloo"></i></div>
         <p>Domes</p>
-      </div>
-      <div class="filter">
+      </a>
+      <a  href="/listings?q=boats" class="filter">
         <div><i class="fa-solid fa-ship"></i></div>
         <p>Boats</p>
+      </a>
       </div>
+      <div class="price-filter">
+  <div class="price-filter-wrapper">
+    <button class="price-filter-btn">Price Filter
+      <span class="arrow">▼</span>
+    </button>
+    <div class="price-dropdown-box">
+      <form action="/listings">
+        <div class="dropbox">
+          <div class="dropdown-section" style="font-size: large;"><b>Select Price Range</b></div>
+          <div class="dropdown-section">
+            <span>Minimum Price</span>
+            <input class="price-input" type="number" placeholder="0" name="priceMin" required>
+          </div>
+          <div class="dropdown-section">
+            <span>Maximum Price</span>
+            <input class="price-input" type="number" placeholder="20000" name="priceMax" required>
+          </div>
+          <div class="dropdown-section">
+            <button type="submit" class="btn btn-dark">Show</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
       <div class="tax-toggle">
         <div class="form-check-reverse form-switch">
           <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
@@ -102,17 +195,27 @@
   </a>
     <% } %>
   </div>
+  
   <script>
     let taxSwitch = document.getElementById("flexSwitchCheckDefault");
     taxSwitch.addEventListener("click", () => {
       let taxInfo = document.getElementsByClassName("tax-info");
-      console.log(taxInfo);
       for(info of taxInfo) {
         if(info.style.display != "inline") {
           info.style.display = "inline";
         } else {
           info.style.display = "none";
         }
+      }
+    })
+    let priceFilterBtn = document.querySelector(".price-filter-btn");
+    priceFilterBtn.addEventListener("click", () => {
+      let priceFilterPanel = document.querySelector(".price-dropdown-box");
+      if(priceFilterPanel.style.display == "block") {
+        priceFilterPanel.style.display = "none";
+      }
+      else {
+        priceFilterPanel.style.display = "block";
       }
     })
   </script>
